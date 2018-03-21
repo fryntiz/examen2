@@ -47,7 +47,7 @@ CREATE TABLE reservas (
   , vuelo_id   bigint     NOT NULL REFERENCES vuelos (id)
                           ON DELETE NO ACTION ON UPDATE CASCADE
   , asiento    numeric(3) NOT NULL
-  , fecha_hora timestamp  NOT NULL
+  , created_at timestamp  NOT NULL DEFAULT localtimestamp
   , UNIQUE (vuelo_id, asiento)
 );
 
