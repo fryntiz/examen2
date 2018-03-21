@@ -40,7 +40,7 @@ class Companias extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'denominacion' => 'Denominacion',
+            'denominacion' => 'Denominación',
         ];
     }
 
