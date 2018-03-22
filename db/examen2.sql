@@ -25,7 +25,8 @@ DROP TABLE IF EXISTS vuelos CASCADE;
 
 CREATE TABLE vuelos (
     id          bigserial    PRIMARY KEY
-  , codigo      varchar(6)   UNIQUE
+  , codigo      varchar(6)   UNIQUE CONSTRAINT ck_codigo_valido
+                             CHECK(codigo ~ '^[A-Z]{2}\d{4}$')
   , origen_id   bigint       NOT NULL REFERENCES aeropuertos (id)
                              ON DELETE NO ACTION ON UPDATE CASCADE
   , destino_id  bigint       NOT NULL REFERENCES aeropuertos (id)
