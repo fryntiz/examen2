@@ -40,11 +40,13 @@ class Vuelos extends \yii\db\ActiveRecord
         return [
             [['origen_id', 'destino_id', 'compania_id', 'salida', 'llegada', 'plazas', 'precio'], 'required'],
             [['origen_id', 'destino_id', 'compania_id'], 'default', 'value' => null],
-            [['origen_id', 'destino_id', 'compania_id'], 'integer'],
+            [['origen_id', 'destino_id', 'compania_id', 'plazas'], 'integer',
+                'min' => 0],
             [['salida', 'llegada'], 'safe'],
-            [['plazas', 'precio'], 'number'],
+            [['precio'], 'number'],
             [['codigo'], 'string', 'max' => 6],
             [['codigo'], 'unique'],
+            [['codigo'], 'match', 'pattern' => '/^[A-Z]{2}\d{4}$/'],
             [['origen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Aeropuertos::className(), 'targetAttribute' => ['origen_id' => 'id']],
             [['destino_id'], 'exist', 'skipOnError' => true, 'targetClass' => Aeropuertos::className(), 'targetAttribute' => ['destino_id' => 'id']],
             [['compania_id'], 'exist', 'skipOnError' => true, 'targetClass' => Companias::className(), 'targetAttribute' => ['compania_id' => 'id']],
@@ -58,7 +60,7 @@ class Vuelos extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'codigo' => 'Codigo',
+            'codigo' => 'Código',
             'origen_id' => 'Origen ID',
             'destino_id' => 'Destino ID',
             'compania_id' => 'Compania ID',
@@ -82,7 +84,7 @@ class Vuelos extends \yii\db\ActiveRecord
      */
     public function getOrigen()
     {
-        return $this->hasOne(Aeropuertos::className(), ['id' => 'origen_id'])->inverseOf('vuelos');
+        return $this->hasOne(Aeropuertos::className(), ['id' => 'origen_id'])->inverseOf('vuelosOrigen');
     }
 
     /**
@@ -90,7 +92,7 @@ class Vuelos extends \yii\db\ActiveRecord
      */
     public function getDestino()
     {
-        return $this->hasOne(Aeropuertos::className(), ['id' => 'destino_id'])->inverseOf('vuelos0');
+        return $this->hasOne(Aeropuertos::className(), ['id' => 'destino_id'])->inverseOf('vuelosDestino');
     }
 
     /**
