@@ -95,12 +95,16 @@ class VuelosSearch extends Vuelos
             'vuelos.codigo' => $this->codigo,
             'o.codigo' => $this->getAttribute('origen.codigo'),
             'd.codigo' => $this->getAttribute('destino.codigo'),
-            'c.denominacion' => $this->getAttribute('compania.denominacion'),
             'salida' => $this->salida,
             'llegada' => $this->llegada,
             'plazas' => $this->plazas,
             'precio' => $this->precio,
         ]);
+
+        $query->andFilterWhere([
+            'ilike', 'c.denominacion', $this->getAttribute('compania.denominacion')
+            ]
+        );
 
         return $dataProvider;
     }
