@@ -30,7 +30,7 @@ class VuelosController extends Controller
     }
 
     /**
-     * Lists all Vuelos models.
+     * Lista todos los modelos de vuelos.
      * @return mixed
      */
     public function actionIndex()
