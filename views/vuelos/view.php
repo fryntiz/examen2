@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'llegada',
             'plazas',
             'precio',
+            'plazas_libres',
         ],
     ]) ?>
 

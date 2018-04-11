@@ -72,7 +72,12 @@ class VuelosSearch extends Vuelos
         // Combino con la tabla origen para poder acceder a sus datos.
         // Ahora a origen se accederá con el alias "o" para aeropuertos origen
         // y "d" para aeropuertos destino.
-        $query->joinWith(['origen o', 'destino d', 'compania c']);
+        $query->select([
+                'vuelos.*',
+                'plazas - COUNT(r.id) AS plazas_libres'
+            ])
+            ->joinWith(['origen o', 'destino d', 'compania c', 'reservas r'])
+            ->groupBy('vuelos.id');
 
         // Establezco como ordenar por atributos fuera de esta tabla
         $dataProvider->sort->attributes['origen.codigo'] = [

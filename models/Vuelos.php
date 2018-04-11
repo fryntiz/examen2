@@ -32,6 +32,9 @@ class Vuelos extends \yii\db\ActiveRecord
         return 'vuelos';
     }
 
+    /* Contiene la cantidad de plazas libres */
+    public $plazas_libres;
+
     /**
      * {@inheritdoc}
      */
