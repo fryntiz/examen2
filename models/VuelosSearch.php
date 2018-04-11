@@ -21,7 +21,7 @@ class VuelosSearch extends Vuelos
             [['id', 'origen_id', 'destino_id', 'compania_id'], 'integer'],
             [['salida', 'llegada'], 'safe'],
             [['codigo', 'origen.codigo', 'destino.codigo'], 'filter', 'filter' => 'mb_strtoupper'],
-            [['plazas', 'precio'], 'number'],
+            [['plazas', 'precio', 'plazas_libres'], 'number'],
             [['compania.denominacion'], 'safe'],
         ];
     }
@@ -32,6 +32,7 @@ class VuelosSearch extends Vuelos
             'origen.codigo',
             'destino.codigo',
             'compania.denominacion',
+            'plazas_libres',
         ]);
     }
 
@@ -72,12 +73,8 @@ class VuelosSearch extends Vuelos
         // Combino con la tabla origen para poder acceder a sus datos.
         // Ahora a origen se accederá con el alias "o" para aeropuertos origen
         // y "d" para aeropuertos destino.
-        $query->select([
-                'vuelos.*',
-                'plazas - COUNT(r.id) AS plazas_libres'
-            ])
-            ->joinWith(['origen o', 'destino d', 'compania c', 'reservas r'])
-            ->groupBy('vuelos.id');
+        $query->joinWith(['origen o', 'destino d', 'compania c'])
+              ->addGroupBy('o.codigo, d.codigo, c.denominacion');
 
         // Establezco como ordenar por atributos fuera de esta tabla
         $dataProvider->sort->attributes['origen.codigo'] = [
@@ -95,6 +92,11 @@ class VuelosSearch extends Vuelos
             'desc' =>['c.denominacion' => SORT_DESC],
         ];
 
+        $dataProvider->sort->attributes['plazas_libres'] = [
+            'asc' => ['plazas_libres' => SORT_ASC],
+            'desc' =>['plazas_libres' => SORT_DESC],
+        ];
+
         // grid filtering conditions
         $query->andFilterWhere([
             'vuelos.codigo' => $this->codigo,
@@ -109,7 +111,12 @@ class VuelosSearch extends Vuelos
         $query->andFilterWhere([
             'ilike', 'c.denominacion', $this->getAttribute('compania.denominacion')
             ]
+
         );
+
+        $query->andFilterHaving([
+            'plazas - COUNT(r.id)' => $this->plazas_libres,
+        ]);
 
         return $dataProvider;
     }

@@ -105,4 +105,19 @@ class Vuelos extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Companias::className(), ['id' => 'compania_id'])->inverseOf('vuelos');
     }
+
+    /*
+     * Sobreescritura del método find() del padre para sustituirlo añadiendo
+     * además de todo lo que viene de la tabla, el valor de las plazas libres.
+     */
+    public static function find()
+    {
+        return parent::find()
+            ->select([
+                'vuelos.*',
+                'plazas - COUNT(r.id) AS plazas_libres'
+            ])
+            ->joinWith(['reservas r'])
+            ->groupBy('vuelos.id');
+    }
 }
