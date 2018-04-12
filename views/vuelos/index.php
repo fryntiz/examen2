@@ -35,7 +35,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'precio:currency',
             'plazas_libres',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{reservar}',
+                'buttons' => [
+                    'reservar' => function($url, $model, $key) {
+                        return Html::a('Reservar', [
+                            'reservas/create',
+                            'vuelo_id' => $model->id
+                        ], ['class' => 'btn-sm btn-success']);
+                    }
+                ],
+            ],
+
         ],
     ]); ?>
 </div>

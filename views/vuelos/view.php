@@ -33,10 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'origen_id',
             'destino_id',
             'compania_id',
-            'salida',
-            'llegada',
+            'salida:datatime',
+            'llegada:datatime',
             'plazas',
-            'precio',
+            'precio:currency',
             'plazas_libres',
         ],
     ]) ?>

@@ -36,6 +36,13 @@ class Reservas extends \yii\db\ActiveRecord
             [['usuario_id', 'vuelo_id'], 'default', 'value' => null],
             [['usuario_id', 'vuelo_id', 'asiento'], 'integer'],
             [['created_at'], 'safe'],
+            [['asiento'], function($attribute, $params, $validator) {
+                $plazas = $this->vuelo->plazas;
+                if(($this->asiento < 1) || ($this->asiento > $plazas)) {
+                    $this->addError($attribute, 'El número de asiento '.
+                        'debe estar comprendido entre 1 y '.$plazas);
+                }
+            }],
             [['vuelo_id', 'asiento'], 'unique', 'targetAttribute' => ['vuelo_id', 'asiento']],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
             [['vuelo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vuelos::className(), 'targetAttribute' => ['vuelo_id' => 'id']],

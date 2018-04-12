@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Reservas;
 use app\models\ReservasSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +21,18 @@ class ReservasController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                // El usuario tiene que estar logueado para acceder a estas
+                // tres acciones: index, create, view.
+                'only' => ['index', 'create', 'view'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -62,9 +75,12 @@ class ReservasController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($vuelo_id)
     {
-        $model = new Reservas();
+        $model = new Reservas([
+            'usuario_id' => Yii::$app->user->id,
+            'vuelo_id' => $vuelo_id,
+        ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

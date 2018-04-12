@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'usuario_id',
             'vuelo_id',
             'asiento',
-            'created_at',
+            'created_at:datetime',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
