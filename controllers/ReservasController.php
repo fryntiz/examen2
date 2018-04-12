@@ -88,6 +88,7 @@ class ReservasController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'asientoslibres' => $model->vuelo->asientosLibres,
         ]);
     }
 

@@ -120,4 +120,19 @@ class Vuelos extends \yii\db\ActiveRecord
             ->joinWith(['reservas r'])
             ->groupBy('vuelos.id');
     }
+
+    /**
+     * Devuelve todos los asientos libres que tiene el vuelo disponible en un
+     * array de números de asiento.
+     */
+    public function getAsientosLibres()
+    {
+        $ocupados = $this->getReservas()->select('asiento')->column();
+        $total = range(1, $this->plazas);
+
+        $libres = array_diff($total, $ocupados);
+
+        /* Devuelvo los libres coincidiendo claves con valores*/
+        return array_combine($libres, $libres);
+    }
 }
