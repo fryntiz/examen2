@@ -86,9 +86,11 @@ class ReservasController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        //var_dump($model->vuelo->getAsientosLibres());die();
+
         return $this->render('create', [
             'model' => $model,
-            'asientoslibres' => $model->vuelo->asientosLibres,
+            'asientosLibres' => $model->vuelo->getAsientosLibres(),
         ]);
     }
 
